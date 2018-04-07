@@ -9,6 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [auth0Domain: "@string/com_auth0_domain", auth0Scheme: "https"]
     }
     buildTypes {
         release {
@@ -28,4 +29,5 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-ec2:2.6.18'
     compile 'com.amazonaws:aws-android-sdk-cognito:2.6.18'
     implementation ('com.amazonaws:aws-android-sdk-mobile-client:2.6.18@aar') { transitive = true }
+    compile 'com.auth0.android:auth0:1.12.2'
 }
