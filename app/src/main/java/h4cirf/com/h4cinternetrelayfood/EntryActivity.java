@@ -19,7 +19,7 @@ import com.amazonaws.mobile.client.AWSStartupResult;
  * parts of the app
  */
 public class EntryActivity extends AppCompatActivity {
-
+    // TESTING :D
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
