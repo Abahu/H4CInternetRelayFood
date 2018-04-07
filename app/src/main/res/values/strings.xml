@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">H4CInternetRelayFood</string>
+    <string name="usrTextView">User Name</string>
+    <string name="passwordTextView">Password</string>
 </resources>
