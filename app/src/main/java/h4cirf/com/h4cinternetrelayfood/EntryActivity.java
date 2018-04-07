@@ -1,6 +1,7 @@
 package h4cirf.com.h4cinternetrelayfood;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -35,15 +36,19 @@ import java.util.concurrent.ExecutionException;
  * parts of the app
  */
 public class EntryActivity extends AppCompatActivity {
-    private TextView token;
+    private TextView outText;
     private Auth0 auth0;
+    private String accessToken;
+    private String tokenID;
+    public static final String EA_ACCESS_TOKEN = "EA_ACCESS_TOKEN";
+    public static final String EA_TOKEN_ID = "EA_TOKEN_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entry);
 
-        token = findViewById(R.id.loginTextView);
+        outText = findViewById(R.id.loginTextView);
         Button loginButton = findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,13 +61,24 @@ public class EntryActivity extends AppCompatActivity {
         auth0.setOIDCConformant(true);
     }
 
+    public void startMain()
+    {
+        Intent intent = new Intent(this, MainActivity.class);
+        // Pass our auth0 information to the new activity so we can validate ourselves and pull
+        // information from auth0
+        intent.putExtra(EA_ACCESS_TOKEN, accessToken);
+        intent.putExtra(EA_TOKEN_ID, tokenID);
+        startActivity(intent);
+    }
+
     public void login()
     {
-        token.setText("Not logged in");
+        outText.setText("Not logged in");
         String userInfoURL = String.format("https://%s/userinfo", getString(R.string.com_auth0_domain));
         WebAuthProvider.init(auth0)
-                .withScheme("http")
+                .withScheme("https")
                 .withAudience(userInfoURL)
+                .withScope("openid email profile")
                 .start(EntryActivity.this, new AuthCallback() {
                     @Override
                     public void onFailure(@NonNull final Dialog dialog) {
@@ -89,7 +105,10 @@ public class EntryActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                token.setText("Logged in: " + credentials.getAccessToken());
+                                accessToken = credentials.getAccessToken();
+                                tokenID = credentials.getIdToken();
+                                outText.setText("Logged in: " + accessToken);
+                                startMain();
                             }
                         });
                     }
