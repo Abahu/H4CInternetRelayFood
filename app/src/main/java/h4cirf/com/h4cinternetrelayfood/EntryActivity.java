@@ -1,12 +1,26 @@
 package h4cirf.com.h4cinternetrelayfood;
 
+import android.app.Dialog;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.AWSStartupHandler;
 import com.amazonaws.mobile.client.AWSStartupResult;
+import com.auth0.android.Auth0;
+import com.auth0.android.authentication.AuthenticationAPIClient;
+import com.auth0.android.authentication.AuthenticationException;
+import com.auth0.android.callback.BaseCallback;
+import com.auth0.android.provider.AuthCallback;
+import com.auth0.android.provider.WebAuthProvider;
+import com.auth0.android.result.Credentials;
+import com.auth0.android.result.UserProfile;
 
 import java.util.concurrent.ExecutionException;
 
@@ -21,19 +35,67 @@ import java.util.concurrent.ExecutionException;
  * parts of the app
  */
 public class EntryActivity extends AppCompatActivity {
-    // TESTING :D
+    private TextView token;
+    private Auth0 auth0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entry);
-        AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
+
+        token = findViewById(R.id.loginTextView);
+        Button loginButton = findViewById(R.id.loginButton);
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(AWSStartupResult awsStartupResult) {
-                Log.d("YourMainActivity", "AWSMobileClient is instantiated and you are connected to AWS!");
+            public void onClick(View v) {
+                login();
             }
-        }).execute();
+        });
+
+        auth0 = new Auth0(this);
+        auth0.setOIDCConformant(true);
     }
+
+    public void login()
+    {
+        token.setText("Not logged in");
+        String userInfoURL = String.format("https://%s/userinfo", getString(R.string.com_auth0_domain));
+        WebAuthProvider.init(auth0)
+                .withScheme("http")
+                .withAudience(userInfoURL)
+                .start(EntryActivity.this, new AuthCallback() {
+                    @Override
+                    public void onFailure(@NonNull final Dialog dialog) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.show();
+                            }
+                        });
+                    }
+
+                    @Override
+                        public void onFailure(final AuthenticationException exception) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(EntryActivity.this, "Error: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull final Credentials credentials) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                token.setText("Logged in: " + credentials.getAccessToken());
+                            }
+                        });
+                    }
+                });
+    }
+
     public void myMethod() throws ExecutionException, InterruptedException{
         //Some url endpoint that you may have
         String myUrl = "http://www.google.com";
