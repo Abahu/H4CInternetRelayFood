@@ -175,6 +175,9 @@ public class PostListFragment extends Fragment {
         }
     }
 
+    public void addPostAction(View view)
+    {}
+
     public void nextPageAction(View view)
     {
         currentPostStart += POSTS_PER_PAGE;

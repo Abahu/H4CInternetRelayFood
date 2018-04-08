@@ -46,4 +46,5 @@
     <string name="reusable_edit_food_type">Food type</string>
     <string name="reusable_edit_status">Status</string>
     <string name="reusable_edit_readiness">Readiness</string>
+    <string name="title_activity_post_map">Map</string>
 </resources>
