@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private HomeFragment homeFragment;
     /// Keep track of this to invoke our navigation button functions
     private PostListFragment postListFragment;
+    //Map interactivity connection
+    //private PostMapActivity postMapActivity;
 
     public Retrofit retrofit;
     public static APIInterface api;

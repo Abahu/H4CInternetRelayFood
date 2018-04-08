@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="h4cirf.com.h4cinternetrelayfood.EntryActivity">
+    tools:context="h4cirf.com.h4cinternetrelayfood.EntryActivity"
+    android:background="@drawable/blk_carrot_large">>
 
     <TextView
         android:id="@+id/loginTextView"

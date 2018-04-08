@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="h4cirf.com.h4cinternetrelayfood.HomeFragment">
+    tools:context="h4cirf.com.h4cinternetrelayfood.HomeFragment"
+    android:background="@drawable/carrots">
 
     <include
         layout="@layout/header_layout"
