@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import h4cirf.com.h4cinternetrelayfood.models.PostModel;
 import h4cirf.com.h4cinternetrelayfood.models.PostSearchModel;
+import h4cirf.com.h4cinternetrelayfood.models.SearchReturnModel;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -28,5 +29,5 @@ interface APIInterface {
     Call<Void> doPutPost(@Path("postid") String postID, @Header("Authorization") String authToken, @Body PostModel postModel);
 
     @POST("/posts/search")
-    Call<ArrayList<PostModel>> doSearchPost(@Body PostSearchModel searchModel);
+    Call<SearchReturnModel> doSearchPost(@Body PostSearchModel searchModel);
 }

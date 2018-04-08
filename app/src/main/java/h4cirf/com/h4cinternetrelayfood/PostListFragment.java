@@ -26,6 +26,7 @@ import java.util.List;
 
 import h4cirf.com.h4cinternetrelayfood.models.PostModel;
 import h4cirf.com.h4cinternetrelayfood.models.PostSearchModel;
+import h4cirf.com.h4cinternetrelayfood.models.SearchReturnModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -78,6 +79,19 @@ public class PostListFragment extends Fragment {
         listView = view.findViewById(R.id.postListView);
         adapter = new PostListAdapter(getContext(), R.layout.post_list_item, posts);
         searchView = view.findViewById((R.id.postListSearch));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                System.out.println("Query submitted: " + query);
+                fetchList();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return true;
+            }
+        });
         view.requestFocus();
         /*
         // Populate our database
@@ -144,7 +158,7 @@ public class PostListFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<ArrayList<PostModel>> call, Throwable t) {
-                    System.err.println("We goofed");
+                    System.err.println("We goofed no search");
                 }
             });
         }
@@ -155,21 +169,22 @@ public class PostListFragment extends Fragment {
             psm.query = query;
             psm.offset = currentPostStart;
             psm.limit = POSTS_PER_PAGE;
-            Call<ArrayList<PostModel>> call = MainActivity.api.doSearchPost(psm);
-            call.enqueue(new Callback<ArrayList<PostModel>>() {
+            Call<SearchReturnModel> call = MainActivity.api.doSearchPost(psm);
+            call.enqueue(new Callback<SearchReturnModel>() {
                 @Override
-                public void onResponse(Call<ArrayList<PostModel>> call, Response<ArrayList<PostModel>> response) {
+                public void onResponse(Call<SearchReturnModel> call, Response<SearchReturnModel> response) {
                     // If we got
                     if (response.isSuccessful()) {
                         posts.clear();
-                        posts.addAll(response.body());
+                        SearchReturnModel srm = response.body();
+                        posts.addAll(srm.results);
                         adapter.notifyDataSetChanged();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ArrayList<PostModel>> call, Throwable t) {
-                    System.err.println("We goofed");
+                public void onFailure(Call<SearchReturnModel> call, Throwable t) {
+                    System.err.println("We goofed search");
                 }
             });
         }
