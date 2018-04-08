@@ -18,6 +18,8 @@ import com.auth0.android.Auth0;
 import com.auth0.android.authentication.AuthenticationAPIClient;
 import com.auth0.android.authentication.AuthenticationException;
 import com.auth0.android.callback.BaseCallback;
+import com.auth0.android.management.ManagementException;
+import com.auth0.android.management.UsersAPIClient;
 import com.auth0.android.provider.AuthCallback;
 import com.auth0.android.provider.WebAuthProvider;
 import com.auth0.android.result.Credentials;
@@ -32,7 +34,10 @@ import java.util.concurrent.ExecutionException;
  */
 public class EntryActivity extends AppCompatActivity {
     private TextView outText;
-    private Auth0 auth0;
+    // Dirty Hack, it's better to pass in a Parcel
+    public static Auth0 auth0;
+    public static UserProfile userProfile;
+    private UsersAPIClient usersClient;
     private String accessToken;
     private String tokenID;
     public static final String EA_ACCESS_TOKEN = "EA_ACCESS_TOKEN";
@@ -103,7 +108,44 @@ public class EntryActivity extends AppCompatActivity {
                                 accessToken = credentials.getAccessToken();
                                 tokenID = credentials.getIdToken();
                                 outText.setText("Logged in: " + accessToken);
-                                startMain();
+
+                                usersClient = new UsersAPIClient(auth0, accessToken);
+                                AuthenticationAPIClient authenticationAPIClient = new AuthenticationAPIClient(auth0);
+
+                                // Get the Auth0 User Profile
+                                authenticationAPIClient.userInfo(accessToken)
+                                        .start(new BaseCallback<UserProfile, AuthenticationException>() {
+                                            @Override
+                                            public void onSuccess(UserProfile userinfo) {
+                                                userProfile = userinfo;
+                                                System.out.println("Successfully got the user profile");
+                                                startMain();
+                                                /*
+                                                usersClient.getProfile(userinfo.getId())
+                                                        .start(new BaseCallback<UserProfile, ManagementException>() {
+                                                            @Override
+                                                            public void onSuccess(UserProfile profile) {
+                                                                // Display the user profile
+                                                                userProfile = profile;
+                                                                System.out.println("Successfully got the user profile");
+                                                                //startMain();
+                                                            }
+
+                                                            @Override
+                                                            public void onFailure(ManagementException error) {
+                                                                // Show error
+                                                                System.err.println("Failed to get user profile 2");
+                                                            }
+                                                        });
+                                                    //*/
+                                            }
+
+                                            @Override
+                                            public void onFailure(AuthenticationException error) {
+                                                // Show error
+                                                System.err.println("Failed to get user profile 1");
+                                            }
+                                        });
                             }
                         });
                     }

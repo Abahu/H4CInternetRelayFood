@@ -31,4 +31,6 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-cognito:2.6.18'
     implementation('com.amazonaws:aws-android-sdk-mobile-client:2.6.18@aar') { transitive = true }
     compile 'com.auth0.android:auth0:1.12.2'
+    compile 'com.squareup.retrofit2:retrofit:2.4.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.4.0'
 }

@@ -2,6 +2,7 @@ package h4cirf.com.h4cinternetrelayfood;
 
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,19 +11,22 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class PostListAdapter extends ArrayAdapter<Post> {
-    public PostListAdapter(Context context, ArrayList<Post> posts) {
+import h4cirf.com.h4cinternetrelayfood.models.PostModel;
+
+public class PostListAdapter extends ArrayAdapter<PostModel> {
+    public PostListAdapter(Context context, ArrayList<PostModel> posts) {
         super(context, 0, posts);
     }
 
-    public PostListAdapter(Context context, int viewResource, ArrayList<Post> posts) {
+    private PostListAdapter(Context context, int viewResource, ArrayList<PostModel> posts) {
         super(context, viewResource, posts);
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         // Get the data item for this position
-        Post post = getItem(position);
+        PostModel post = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.post_list_item, parent, false);
@@ -33,10 +37,10 @@ public class PostListAdapter extends ArrayAdapter<Post> {
         TextView postWeight = convertView.findViewById(R.id.postListWeight);
         TextView postExpiry = convertView.findViewById(R.id.postListExpiry);
         // Populate the data into the template view using the data object
-        postType.setText(post.foodType);
-        postDescription.setText(post.postDescription);
-        postWeight.setText(post.weight);
-        postExpiry.setText(post.expiry);
+        postType.setText("Food");
+        postDescription.setText(post.title);
+        postWeight.setText(post.amount);
+        postExpiry.setText("Never");
 
         // Return the completed view to render on screen
         return convertView;

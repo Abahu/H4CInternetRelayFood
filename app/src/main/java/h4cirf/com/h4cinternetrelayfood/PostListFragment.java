@@ -10,7 +10,22 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.amazonaws.http.HttpResponse;
+import com.auth0.android.Auth0;
+import com.auth0.android.management.UsersAPIClient;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import h4cirf.com.h4cinternetrelayfood.models.PostModel;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -20,10 +35,11 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class PostListFragment extends Fragment {
-    private final long POSTS_PER_PAGE = 10;
-    private long currentPostStart = 0;
-    private ArrayList<Post> posts;
+    private final int POSTS_PER_PAGE = 50;
+    private int currentPostStart = 0;
+    private ArrayList<PostModel> posts;
     private PostListAdapter adapter;
+    private ListView listView;
 
     public PostListFragment() {
         // Required empty public constructor
@@ -45,15 +61,6 @@ public class PostListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        posts = new ArrayList<>();
-        // Get the first POSTS_PER_PAGE posts and put it in our list
-        // TODO remove the debug generic list
-        Post p1 = new Post();
-        p1.postDescription = "Lots of yummy carrots!";
-        p1.weight = "10";
-        p1.expiry = "10-04-2018";
-        p1.foodType = "Veg";
-        posts.add(p1);
     }
 
     @Override
@@ -61,17 +68,73 @@ public class PostListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_post_list, container, false);
-        // Populate our list
+
+        // Get the first POSTS_PER_PAGE posts and put it in our list
+        posts = new ArrayList<>();
+        listView = view.findViewById(R.id.postListView);
         adapter = new PostListAdapter(getContext(), R.layout.post_list_item, posts);
-        ListView listView = view.findViewById(R.id.postListView);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        MainActivity parentActivity = (MainActivity) getActivity();
+        PostModel tempModel = new PostModel();
+        tempModel.amount = "20";
+        tempModel.creationDate = Calendar.getInstance().getTime();
+        tempModel.description = "Lots of carrots";
+        tempModel.pickupAddress = "1395 University St, Eugene, OR 97403";
+        tempModel.readiness = "packed";
+        tempModel.pickupWindow = "Now or never";
+        tempModel.title = "Huge carrots!";
+        tempModel.status = "available";
+        tempModel.email = parentActivity.userProfile.getEmail();
+        /*
+        for(int i = 0; i < 10; ++i)
+        {
+            MainActivity.api.doPutPost(parentActivity.tokenID, tempModel).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+
+                }
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+
+                }
+            });
+        }
+        //*/
+
+        Call<ArrayList<PostModel>> call =  MainActivity.api.doGetListResources(0, POSTS_PER_PAGE);
+        call.enqueue(new Callback<ArrayList<PostModel>>() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Post selectedPost = (Post) parent.getItemAtPosition(position);
-                // TODO: Launch the post view using the selected post
+            public void onResponse(Call<ArrayList<PostModel>> call, Response<ArrayList<PostModel>> response) {
+                // If we got
+                if(response.isSuccessful())
+                {
+                    posts.clear();
+                    posts.addAll(response.body());
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<PostModel>> call, Throwable t) {
+                System.err.println("We goofed");
             }
         });
+
+        // Populate our ListView
+        listView.setAdapter(adapter);
+        //*
+        listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                PostModel selectedPost = (PostModel) parent.getItemAtPosition(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        //*/
         return view;
     }
 
@@ -84,4 +147,5 @@ public class PostListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
+
 }
