@@ -11,7 +11,9 @@
     <string name="title_activity_add_post">AddPostActivity</string>
     <string name="submit_post">Submit</string>
     <string name="add_post">Add posting</string>
-    <string name="edit_post">Edit</string>
+    <string name="edit_post">Finish editing</string>
+    <string name="contact_poster">Contact poster</string>
+    <string name="start_edit_post">Edit post</string>
     <string-array name="foodTypes_spinner_array">
         <item>Select a food type</item>
         <item>Grain</item>
@@ -41,4 +43,7 @@
     <string name="reusable_edit_expiry">Expiration date</string>
     <string name="reusable_edit_description">Description</string>
     <string name="reusable_edit_comment">Comments</string>
+    <string name="reusable_edit_food_type">Food type</string>
+    <string name="reusable_edit_status">Status</string>
+    <string name="reusable_edit_readiness">Readiness</string>
 </resources>

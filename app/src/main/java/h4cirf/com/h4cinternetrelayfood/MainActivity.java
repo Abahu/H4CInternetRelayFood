@@ -20,6 +20,7 @@ import com.auth0.android.management.UsersAPIClient;
 import com.auth0.android.result.UserProfile;
 import com.google.gson.Gson;
 
+import h4cirf.com.h4cinternetrelayfood.models.PostModel;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -31,13 +32,16 @@ public class MainActivity extends AppCompatActivity {
     protected static UserProfile userProfile;
 
     public static final int ADD_DID_POST = 1;
+    public static final String POST_MODEL = "post";
 
     private static final String API_URL = "http://food.dlfsystems.com:10100/";
     private HomeFragment homeFragment;
+    /// Keep track of this to invoke our navigation button functions
     private PostListFragment postListFragment;
 
     public Retrofit retrofit;
     public static APIInterface api;
+
 
     Retrofit provideRetrofit(OkHttpClient httpClient)
     {
@@ -79,6 +83,17 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.container, postListFragment);
         //transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    /**
+     *
+     * @param post The post which we wish to view
+     */
+    public void viewPost(PostModel post)
+    {
+        Intent intent = new Intent(this, ViewPostActivity.class);
+        intent.putExtra(POST_MODEL, post);
+        startActivity(intent);
     }
 
     @Override
@@ -138,5 +153,19 @@ public class MainActivity extends AppCompatActivity {
                 //switchToPostList();
             }
         }
+    }
+
+    public void nextPageAction(View view)
+    {
+        postListFragment.nextPageAction(view);
+    }
+    public void prevPageAction(View view)
+    {
+        postListFragment.prevPageAction(view);
+    }
+    public void firstPageAction(View view)
+    {
+
+        postListFragment.firstPageAction(view);
     }
 }

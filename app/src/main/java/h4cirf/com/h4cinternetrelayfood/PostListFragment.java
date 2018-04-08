@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 
 import h4cirf.com.h4cinternetrelayfood.models.PostModel;
+import h4cirf.com.h4cinternetrelayfood.models.PostSearchModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,6 +43,7 @@ public class PostListFragment extends Fragment {
     private ArrayList<PostModel> posts;
     private PostListAdapter adapter;
     private ListView listView;
+    SearchView searchView;
 
     public PostListFragment() {
         // Required empty public constructor
@@ -60,13 +62,6 @@ public class PostListFragment extends Fragment {
         return fragment;
     }
 
-    /**
-     * Switches to the AddPostActivity as used by the postListAdd button
-     */
-    public void addPostAction(View view)
-    {
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,9 +77,9 @@ public class PostListFragment extends Fragment {
         posts = new ArrayList<>();
         listView = view.findViewById(R.id.postListView);
         adapter = new PostListAdapter(getContext(), R.layout.post_list_item, posts);
-        SearchView searchView = view.findViewById((R.id.postListSearch));
+        searchView = view.findViewById((R.id.postListSearch));
         view.requestFocus();
-        /*
+        //*
         // Populate our database
         MainActivity parentActivity = (MainActivity) getActivity();
         PostModel tempModel = new PostModel();
@@ -96,55 +91,24 @@ public class PostListFragment extends Fragment {
         tempModel.pickupWindow = "Now or never";
         tempModel.title = "Huge carrots!";
         tempModel.status = "available";
-        tempModel.email = parentActivity.userProfile.getEmail();
-        for(int i = 0; i < 10; ++i)
-        {
-            MainActivity.api.doPutPost(parentActivity.tokenID, tempModel).enqueue(new Callback<Void>() {
-                @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-
-                }
-
-                @Override
-                public void onFailure(Call<Void> call, Throwable t) {
-
-                }
-            });
-        }
+        //tempModel.email = MainActivity.userProfile.getEmail();
+        tempModel.email = "b1t@ymail.com";
+        //parentActivity.viewPost(tempModel);
+        for(int i = 0; i < 20; ++i)
+            posts.add(tempModel);
         //*/
 
-        Call<ArrayList<PostModel>> call =  MainActivity.api.doGetListResources(0, POSTS_PER_PAGE);
-        call.enqueue(new Callback<ArrayList<PostModel>>() {
-            @Override
-            public void onResponse(Call<ArrayList<PostModel>> call, Response<ArrayList<PostModel>> response) {
-                // If we got
-                if(response.isSuccessful())
-                {
-                    posts.clear();
-                    posts.addAll(response.body());
-                    adapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<PostModel>> call, Throwable t) {
-                System.err.println("We goofed");
-            }
-        });
-
+        // Get our list
+        fetchList();
         // Populate our ListView
         listView.setAdapter(adapter);
         //*
-        listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 PostModel selectedPost = (PostModel) parent.getItemAtPosition(position);
-                System.out.println("Pressed post with position" + position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+                ((MainActivity) getActivity()).viewPost(selectedPost);
+                //System.out.println("Pressed post with position" + position);
             }
         });
         //*/
@@ -161,4 +125,71 @@ public class PostListFragment extends Fragment {
         super.onDetach();
     }
 
+    private void fetchList()
+    {
+        String query = searchView.getQuery().toString();
+        // If we aren't searching for anything i.e. our query is empty, get everything
+        if(query.isEmpty()) {
+            Call<ArrayList<PostModel>> call = MainActivity.api.doGetListResources(0, POSTS_PER_PAGE);
+            call.enqueue(new Callback<ArrayList<PostModel>>() {
+                @Override
+                public void onResponse(Call<ArrayList<PostModel>> call, Response<ArrayList<PostModel>> response) {
+                    // If we got
+                    if (response.isSuccessful()) {
+                        posts.clear();
+                        posts.addAll(response.body());
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ArrayList<PostModel>> call, Throwable t) {
+                    System.err.println("We goofed");
+                }
+            });
+        }
+        else
+        {
+            // Set up our search argument
+            PostSearchModel psm = new PostSearchModel();
+            psm.query = query;
+            psm.offset = currentPostStart;
+            psm.limit = POSTS_PER_PAGE;
+            Call<ArrayList<PostModel>> call = MainActivity.api.doSearchPost(psm);
+            call.enqueue(new Callback<ArrayList<PostModel>>() {
+                @Override
+                public void onResponse(Call<ArrayList<PostModel>> call, Response<ArrayList<PostModel>> response) {
+                    // If we got
+                    if (response.isSuccessful()) {
+                        posts.clear();
+                        posts.addAll(response.body());
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ArrayList<PostModel>> call, Throwable t) {
+                    System.err.println("We goofed");
+                }
+            });
+        }
+    }
+
+    public void nextPageAction(View view)
+    {
+        currentPostStart += POSTS_PER_PAGE;
+        fetchList();
+    }
+    public void prevPageAction(View view)
+    {
+        currentPostStart -= POSTS_PER_PAGE;
+        if (currentPostStart < 0)
+            currentPostStart = 0;
+        fetchList();
+    }
+    public void firstPageAction(View view)
+    {
+        currentPostStart = 0;
+        fetchList();
+    }
 }

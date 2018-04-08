@@ -32,7 +32,8 @@
             android:label="@string/title_activity_add_post"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".EditPostActivity"></activity>
+        <activity android:name=".EditPostActivity" />
+        <activity android:name=".ViewPostActivity"></activity>
     </application>
 
 </manifest>

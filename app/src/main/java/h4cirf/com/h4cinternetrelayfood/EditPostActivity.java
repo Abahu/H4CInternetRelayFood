@@ -16,7 +16,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EditPostActivity extends AppCompatActivity {
-    Spinner foodTypeSpinner;
+    Spinner             foodTypeSpinner;
     TextInputEditText   quantityText;
     TextInputEditText   pickupTimesText;
     TextInputEditText   addressText;
@@ -33,7 +33,7 @@ public class EditPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_post);
 
         // Get our current post
-        currentPost = getIntent().getExtras().getParcelable("post");
+        currentPost = getIntent().getExtras().getParcelable(MainActivity.POST_MODEL);
 
         //Get forms
         foodTypeSpinner     = findViewById(R.id.reusableEditFoodType);

@@ -48,6 +48,7 @@ public class PostModel implements Parcelable{
 
     public PostModel()
     {
+        eligibility = new ArrayList<>();
     }
 
     public static final Parcelable.Creator<PostModel> CREATOR
