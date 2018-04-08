@@ -5,7 +5,7 @@
     android:id="@+id/addPostRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddPostActivity">
+    tools:context="h4cirf.com.h4cinternetrelayfood.EditPostActivity">
 
     <Button
         android:id="@+id/EditPostButton"

@@ -10,6 +10,8 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 interface APIInterface {
@@ -21,5 +23,8 @@ interface APIInterface {
     Call<ArrayList<PostModel>> doGetListResources(@Query("offset") int offset, @Query("limit") int limit);
 
     @POST("/posts")
-    Call<Void> doPutPost(@Header("Authorization") String authToken, @Body PostModel postModel);
+    Call<Void> doPostPost(@Header("Authorization") String authToken, @Body PostModel postModel);
+
+    @PUT("/posts/{postid}")
+    Call<Void> doPutPost(@Path("postid") String postID, @Header("Authorization") String authToken, @Body PostModel postModel);
 }

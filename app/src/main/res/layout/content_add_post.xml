@@ -10,7 +10,7 @@
     tools:showIn="@layout/activity_add_post">
 
     <Button
-        android:id="@+id/AddPostButton"
+        android:id="@+id/EditPostButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -30,7 +30,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:shrinkColumns="*"
-        app:layout_constraintBottom_toTopOf="@+id/AddPostButton"
+        app:layout_constraintBottom_toTopOf="@+id/EditPostButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

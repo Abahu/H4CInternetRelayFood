@@ -26,10 +26,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     // Protected to allow fragments to access
-    protected String accessToken;
-    protected String tokenID;
-    protected UserProfile userProfile;
+    protected static String accessToken;
+    protected static String tokenID;
+    protected static UserProfile userProfile;
 
+    public static final int ADD_DID_POST = 1;
 
     private static final String API_URL = "http://food.dlfsystems.com:10100/";
     private HomeFragment homeFragment;
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, homeFragment);
-        transaction.addToBackStack(null);
+        //transaction.addToBackStack(null);
         transaction.commit();
     }
 
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
     {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, postListFragment);
-        transaction.addToBackStack(null);
+        //transaction.addToBackStack(null);
         transaction.commit();
     }
 
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         // Add our default fragment, a HomeFragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.container, homeFragment);
-        transaction.addToBackStack(null);
+        //transaction.addToBackStack(null);
         transaction.commit();
 
         // Instantiate our Retrofit API
@@ -118,6 +119,24 @@ public class MainActivity extends AppCompatActivity {
     {
         System.out.println("Going to the Add Post Activity");
         Intent intent = new Intent(this, AddPostActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, ADD_DID_POST);
+    }
+
+    /**
+     * Checks if we finished posting. If so, refresh our fragment
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == ADD_DID_POST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // The user posted, time to refresh our fragment
+                //switchToPostList();
+            }
+        }
     }
 }

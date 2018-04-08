@@ -1,29 +1,67 @@
 package h4cirf.com.h4cinternetrelayfood;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Arrays;
 
 import h4cirf.com.h4cinternetrelayfood.models.PostModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddPostActivity extends AppCompatActivity {
-
+public class EditPostActivity extends AppCompatActivity {
+    Spinner foodTypeSpinner;
+    TextInputEditText   quantityText;
+    TextInputEditText   pickupTimesText;
+    TextInputEditText   addressText;
+    TextInputEditText   contactInfoText;
+    TextInputEditText   expirationText;
+    TextInputEditText   descriptionText;
+    Spinner             readinessSpinner;
+    Spinner             statusSpinner;
+    TextInputEditText   commentText;
+    PostModel currentPost;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_post);
+
+        // Get our current post
+        currentPost = getIntent().getExtras().getParcelable("post");
+
+        //Get forms
+        foodTypeSpinner     = findViewById(R.id.reusableEditFoodType);
+        quantityText        = findViewById(R.id.reusableEditQuantityText);
+        pickupTimesText     = findViewById(R.id.reusableEditPickupTimeText);
+        addressText         = findViewById(R.id.reusableEditAddressText);
+        contactInfoText     = findViewById(R.id.reusableEditContactInfoText);
+        expirationText      = findViewById(R.id.reusableEditExpirationText);
+        descriptionText     = findViewById(R.id.reusableEditDescriptionText);
+        readinessSpinner    = findViewById(R.id.reusableEditReadiness);
+        statusSpinner       = findViewById(R.id.reusableEditStatus);
+        commentText         = findViewById(R.id.reusableEditCommentText);
+        // Set their values
+        //NYI
+        //ArrayList<String> foodTypeArr = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.foodTypes_spinner_array)));
+        //foodTypeSpinner.setSelection(foodTypeArr.indexOf(currentPost.foodtype));
+        quantityText.setText(currentPost.amount);
+        pickupTimesText.setText(currentPost.pickupWindow);
+        addressText.setText(currentPost.pickupAddress);
+        contactInfoText.setText(currentPost.email);
+        //NYI
+        expirationText.setText("Never");
+        descriptionText.setText(currentPost.title);
+        ArrayList<String> readinessArr = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.readiness_spinner_array)));
+        readinessSpinner.setSelection(readinessArr.indexOf(currentPost.readiness));
+        ArrayList<String> statusArr = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.status_spinner_array)));
+        statusSpinner.setSelection((statusArr.indexOf(currentPost.status)));
+        commentText.setText(currentPost.description);
 
         View root = findViewById(R.id.addPostRoot);
         root.requestFocus();
@@ -36,17 +74,6 @@ public class AddPostActivity extends AppCompatActivity {
      */
     public void submitAction(View view)
     {
-        //Bring up our views (in list order)
-        Spinner             foodTypeSpinner     = findViewById(R.id.reusableEditFoodType);
-        TextInputEditText   quantityText        = findViewById(R.id.reusableEditQuantityText);
-        TextInputEditText   pickupTimesText     = findViewById(R.id.reusableEditPickupTimeText);
-        TextInputEditText   addressText         = findViewById(R.id.reusableEditAddressText);
-        TextInputEditText   contactInfoText     = findViewById(R.id.reusableEditContactInfoText);
-        TextInputEditText   expirationText      = findViewById(R.id.reusableEditExpirationText);
-        TextInputEditText   descriptionText     = findViewById(R.id.reusableEditDescriptionText);
-        Spinner             readinessSpinner    = findViewById(R.id.reusableEditReadiness);
-        Spinner             statusSpinner       = findViewById(R.id.reusableEditStatus);
-        TextInputEditText   commentText         = findViewById(R.id.reusableEditCommentText);
         //*****Formatting Checks*****
         boolean succeeded = true;
         PostModel post = new PostModel();
@@ -92,17 +119,16 @@ public class AddPostActivity extends AppCompatActivity {
             //Error somehow
             succeeded = false;
         }
+        post._id = currentPost._id;
         post.status = statusSpinner.getSelectedItem().toString();
         post.description = commentText.getText().toString();
 
         //*****Launch on Success*****
         if(succeeded)
         {
-            post.creationDate = Calendar.getInstance().getTime();
-            post.eligibility = new ArrayList<>();
             // Add the new post to the database and return to our main activity regardless of
             // success
-            MainActivity.api.doPostPost(MainActivity.tokenID, post).enqueue(new Callback<Void>() {
+            MainActivity.api.doPutPost(post._id, MainActivity.tokenID, post).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     returnToMain(true);
