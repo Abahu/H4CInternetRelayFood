@@ -88,7 +88,7 @@
     <Button
         android:id="@+id/mapButton"
         android:layout_width="fill_parent"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Map View"
         app:layout_constraintEnd_toEndOf="parent"
