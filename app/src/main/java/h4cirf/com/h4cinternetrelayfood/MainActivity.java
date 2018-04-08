@@ -134,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
     {
         System.out.println("Going to the Add Post Activity");
         Intent intent = new Intent(this, AddPostActivity.class);
+        intent.putExtra("token", tokenID);
         startActivityForResult(intent, ADD_DID_POST);
     }
 

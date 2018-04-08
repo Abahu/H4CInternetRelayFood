@@ -19,12 +19,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AddPostActivity extends AppCompatActivity {
-
+    public static String tokenID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_post);
 
+        tokenID = getIntent().getStringExtra("token");
         View root = findViewById(R.id.addPostRoot);
         root.requestFocus();
     }
@@ -102,7 +103,8 @@ public class AddPostActivity extends AppCompatActivity {
             post.eligibility = new ArrayList<>();
             // Add the new post to the database and return to our main activity regardless of
             // success
-            MainActivity.api.doPostPost(MainActivity.tokenID, post).enqueue(new Callback<Void>() {
+            System.out.println("DEBUG: Token: " + tokenID);
+            MainActivity.api.doPostPost(tokenID, post).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     returnToMain(true);
@@ -110,6 +112,7 @@ public class AddPostActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
+                    System.err.println(" DEBUG: Failed: is tokenID null: " + (tokenID == null));
                     returnToMain(false);
                 }
             });

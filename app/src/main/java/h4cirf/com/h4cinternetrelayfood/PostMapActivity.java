@@ -20,6 +20,7 @@ import java.util.List;
 
 import h4cirf.com.h4cinternetrelayfood.models.PostModel;
 import h4cirf.com.h4cinternetrelayfood.models.PostSearchModel;
+import h4cirf.com.h4cinternetrelayfood.models.SearchReturnModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -111,27 +112,6 @@ public class PostMapActivity extends FragmentActivity implements OnMapReadyCallb
         }
         else
         {
-            // Set up our search argument
-            PostSearchModel psm = new PostSearchModel();
-            psm.query = query;
-            psm.offset = currentPostStart;
-            psm.limit = POSTS_PER_PAGE;
-            Call<ArrayList<PostModel>> call = MainActivity.api.doSearchPost(psm);
-            call.enqueue(new Callback<ArrayList<PostModel>>() {
-                @Override
-                public void onResponse(Call<ArrayList<PostModel>> call, Response<ArrayList<PostModel>> response) {
-                    // If we got
-                    if (response.isSuccessful()) {
-                        posts.clear();
-                        posts.addAll(response.body());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ArrayList<PostModel>> call, Throwable t) {
-                    System.err.println("We goofed");
-                }
-            });
         }
     }
 }

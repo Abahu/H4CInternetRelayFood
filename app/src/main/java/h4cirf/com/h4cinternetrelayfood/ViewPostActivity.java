@@ -61,7 +61,7 @@ public class ViewPostActivity extends AppCompatActivity {
         commentText.setText(currentPost.description);
 
         // Switch the button functionality and text if we're the poster
-        if(currentPost.email.equals(EntryActivity.userProfile.getEmail()))
+        if(currentPost.email != null && currentPost.email.equals(EntryActivity.userProfile.getEmail()))
         {
             Button button = findViewById(R.id.ContactButton);
             button.setText(R.string.start_edit_post);
