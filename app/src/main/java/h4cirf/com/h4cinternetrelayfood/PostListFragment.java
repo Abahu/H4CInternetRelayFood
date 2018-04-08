@@ -49,6 +49,7 @@ public class PostListFragment extends Fragment {
     private PostListAdapter adapter;
     private ListView listView;
     SearchView searchView;
+    Intent intent;
 
     public PostListFragment() {
         // Required empty public constructor
@@ -77,6 +78,18 @@ public class PostListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_post_list, container, false);
+
+        /*
+        // Go to map view
+        //intent = new Intent(getActivity(), PostMapActivity);
+        // final Button button = (Button) view.findViewById(R.id.mapButton);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(intent);
+            }
+        });
+        */
 
         // Get the first POSTS_PER_PAGE posts and put it in our list
         posts = new ArrayList<>();
