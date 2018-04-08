@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">H4CInternetRelayFood</string>
+    <string name="app_name">Food Rescue</string>
     <string name="com_auth0_client_id">naGKZTosG2Np77HXLWntXVcY1010eTFY</string>
     <string name="com_auth0_domain">irf.auth0.com</string>
     <string name="usrTextView">User Name</string>

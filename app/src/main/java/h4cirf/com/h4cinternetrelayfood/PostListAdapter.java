@@ -18,7 +18,7 @@ public class PostListAdapter extends ArrayAdapter<PostModel> {
         super(context, 0, posts);
     }
 
-    private PostListAdapter(Context context, int viewResource, ArrayList<PostModel> posts) {
+    public PostListAdapter(Context context, int viewResource, ArrayList<PostModel> posts) {
         super(context, viewResource, posts);
     }
 
