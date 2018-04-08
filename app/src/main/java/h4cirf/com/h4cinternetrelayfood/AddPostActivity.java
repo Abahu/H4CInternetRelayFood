@@ -31,7 +31,7 @@ public class AddPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_post);
 
-        doStuff();
+        //doStuff();
 
         tokenID = getIntent().getStringExtra("token");
         View root = findViewById(R.id.addPostRoot);
@@ -107,26 +107,26 @@ public class AddPostActivity extends AppCompatActivity {
         //*/
 
         //*****Launch on Success*****
-        if(true)
+        if(succeeded)
         {
             TimeZone tz = TimeZone.getTimeZone("UTC");
             DateFormat df = new SimpleDateFormat("yyy-MM-dd'T'HH:mm'Z'");
             df.setTimeZone(tz);
             post.creationDate = df.format(new Date());
-            doStuff();
+            //doStuff();
             System.out.println(new Gson().toJson(post));
             MainActivity.api.doPostPost(MainActivity.tokenID, post).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     System.out.println("Werked");
                     System.out.println("Was succ? " + response.isSuccessful());
-                    //returnToMain(true);
+                    returnToMain(true);
                 }
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
                     System.err.println(" DEBUG: Failed: is tokenID null: " + (MainActivity.tokenID == null));
-                    //returnToMain(false);
+                    returnToMain(false);
                 }
             });
             //doStuff();
