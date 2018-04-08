@@ -25,11 +25,6 @@ import com.auth0.android.result.UserProfile;
 
 import java.util.concurrent.ExecutionException;
 
-/*
- * Comment your name here, save, commit, and then push to show us all you have this working.
- * Abahu
- */
-
 /**
  * Created by Abahu
  * The entry activity from which we can load all of our assets/navigate to the more functional

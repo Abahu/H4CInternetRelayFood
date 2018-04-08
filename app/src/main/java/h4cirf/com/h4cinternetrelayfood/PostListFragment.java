@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +18,10 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class PostListFragment extends Fragment {
+    private final long POSTS_PER_PAGE = 10;
+    private long currentPostStart = 0;
+    private ArrayList<Post> posts;
+
     public PostListFragment() {
         // Required empty public constructor
     }
@@ -36,6 +42,8 @@ public class PostListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Get the first POSTS_PER_PAGE posts and put it in our list
+
     }
 
     @Override
