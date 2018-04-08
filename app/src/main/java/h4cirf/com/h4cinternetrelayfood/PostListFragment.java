@@ -35,7 +35,7 @@ import retrofit2.Response;
  * create an instance of this fragment.
  */
 public class PostListFragment extends Fragment {
-    private final int POSTS_PER_PAGE = 50;
+    private final int POSTS_PER_PAGE = 20;
     private int currentPostStart = 0;
     private ArrayList<PostModel> posts;
     private PostListAdapter adapter;

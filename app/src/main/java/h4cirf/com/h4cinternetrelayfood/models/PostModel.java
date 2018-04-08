@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 public class PostModel {
-    public String _id;
+    public String _id; // Don't fill out this
     public Date creationDate;
     public String email;
     public String title;
