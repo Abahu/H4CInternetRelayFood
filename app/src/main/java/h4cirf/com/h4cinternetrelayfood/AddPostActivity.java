@@ -6,20 +6,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.TextView;
 
-import java.util.concurrent.ExecutionException;
-
-public class TestActivity extends AppCompatActivity {
-    //Some url endpoint that you may have
-    String myUrl = "http://food.dlfsystems.com:10100/post/search";
-    //String to place our result in
-    String result;
+public class AddPostActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test);
+        setContentView(R.layout.activity_add_post);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -31,14 +24,16 @@ public class TestActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+/*
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.foodTypes_spinner_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+*/
     }
 
-    public void myMethod() throws ExecutionException, InterruptedException{
-        //Instantiate new instance of our class
-        HttpGetRequest getRequest = new HttpGetRequest();
-        //Perform the doInBackground method, passing in our url
-        result = getRequest.execute(myUrl).get();
-        final TextView testTextView = findViewById(R.id.testTextView);
-        testTextView.setText(result);
-    }
 }

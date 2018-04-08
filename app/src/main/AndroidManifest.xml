@@ -21,11 +21,15 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main"/>
+            android:label="@string/title_activity_main" />
         <activity
             android:name=".TestActivity"
             android:label="@string/title_activity_test"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AddPostActivity"
+            android:label="@string/title_activity_add_post"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

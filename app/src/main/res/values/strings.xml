@@ -8,4 +8,15 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">The Market</string>
+    <string name="title_activity_add_post">AddPostActivity</string>
+    <string-array name="foodTypes_spinner_array">
+        <item>Grain</item>
+        <item>Vegetable</item>
+        <item>Fruit</item>
+        <item>Meal</item>
+        <item>Snack</item>
+        <item>Bulk Food</item>
+        <item>Canned Goods</item>
+        <item>Miscellaneous</item>
+    </string-array>
 </resources>
