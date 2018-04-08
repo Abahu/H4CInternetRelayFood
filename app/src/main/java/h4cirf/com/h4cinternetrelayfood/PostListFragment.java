@@ -79,7 +79,7 @@ public class PostListFragment extends Fragment {
         adapter = new PostListAdapter(getContext(), R.layout.post_list_item, posts);
         searchView = view.findViewById((R.id.postListSearch));
         view.requestFocus();
-        //*
+        /*
         // Populate our database
         MainActivity parentActivity = (MainActivity) getActivity();
         PostModel tempModel = new PostModel();
@@ -180,11 +180,13 @@ public class PostListFragment extends Fragment {
 
     public void nextPageAction(View view)
     {
+        System.out.println("  DEBUG: in nextPageAction");
         currentPostStart += POSTS_PER_PAGE;
         fetchList();
     }
     public void prevPageAction(View view)
     {
+        System.out.println("  DEBUG: in prevPageAction");
         currentPostStart -= POSTS_PER_PAGE;
         if (currentPostStart < 0)
             currentPostStart = 0;
@@ -192,6 +194,7 @@ public class PostListFragment extends Fragment {
     }
     public void firstPageAction(View view)
     {
+        System.out.println("  DEBUG: in firstPageAction");
         currentPostStart = 0;
         fetchList();
     }
