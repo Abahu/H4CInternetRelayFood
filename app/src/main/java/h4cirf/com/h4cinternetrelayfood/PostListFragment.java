@@ -130,7 +130,7 @@ public class PostListFragment extends Fragment {
         String query = searchView.getQuery().toString();
         // If we aren't searching for anything i.e. our query is empty, get everything
         if(query.isEmpty()) {
-            Call<ArrayList<PostModel>> call = MainActivity.api.doGetListResources(0, POSTS_PER_PAGE);
+            Call<ArrayList<PostModel>> call = MainActivity.api.doGetListResources(currentPostStart, POSTS_PER_PAGE);
             call.enqueue(new Callback<ArrayList<PostModel>>() {
                 @Override
                 public void onResponse(Call<ArrayList<PostModel>> call, Response<ArrayList<PostModel>> response) {

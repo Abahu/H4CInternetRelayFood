@@ -4,6 +4,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -13,11 +15,24 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+
+import h4cirf.com.h4cinternetrelayfood.models.PostModel;
+import h4cirf.com.h4cinternetrelayfood.models.PostSearchModel;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PostMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+
+    // My stuff :)
+    private final int POSTS_PER_PAGE = 20;
+    private int currentPostStart = 0;
+    private ArrayList<PostModel> posts;
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +84,54 @@ public class PostMapActivity extends FragmentActivity implements OnMapReadyCallb
         {
             System.err.println(e.getMessage());
             return new LatLng(-34, 151);
+        }
+    }
+
+    private void fetchList()
+    {
+        String query = "";
+        // If we aren't searching for anything i.e. our query is empty, get everything
+        if(query.isEmpty()) {
+            Call<ArrayList<PostModel>> call = MainActivity.api.doGetListResources(currentPostStart, POSTS_PER_PAGE);
+            call.enqueue(new Callback<ArrayList<PostModel>>() {
+                @Override
+                public void onResponse(Call<ArrayList<PostModel>> call, Response<ArrayList<PostModel>> response) {
+                    // If we got
+                    if (response.isSuccessful()) {
+                        posts.clear();
+                        posts.addAll(response.body());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ArrayList<PostModel>> call, Throwable t) {
+                    System.err.println("We goofed");
+                }
+            });
+        }
+        else
+        {
+            // Set up our search argument
+            PostSearchModel psm = new PostSearchModel();
+            psm.query = query;
+            psm.offset = currentPostStart;
+            psm.limit = POSTS_PER_PAGE;
+            Call<ArrayList<PostModel>> call = MainActivity.api.doSearchPost(psm);
+            call.enqueue(new Callback<ArrayList<PostModel>>() {
+                @Override
+                public void onResponse(Call<ArrayList<PostModel>> call, Response<ArrayList<PostModel>> response) {
+                    // If we got
+                    if (response.isSuccessful()) {
+                        posts.clear();
+                        posts.addAll(response.body());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ArrayList<PostModel>> call, Throwable t) {
+                    System.err.println("We goofed");
+                }
+            });
         }
     }
 }
