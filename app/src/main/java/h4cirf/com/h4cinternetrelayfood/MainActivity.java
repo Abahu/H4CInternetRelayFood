@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.auth0.android.Auth0;
@@ -107,5 +108,16 @@ public class MainActivity extends AppCompatActivity {
         OkHttpClient httpClient = new OkHttpClient.Builder().build();
         retrofit = provideRetrofit(httpClient);
         api = retrofit.create(APIInterface.class);
+    }
+
+
+    /**
+     * Switches to the AddPostActivity as used by the postListAdd button
+     */
+    public void addPostAction(View view)
+    {
+        System.out.println("Going to the Add Post Activity");
+        Intent intent = new Intent(this, AddPostActivity.class);
+        startActivity(intent);
     }
 }

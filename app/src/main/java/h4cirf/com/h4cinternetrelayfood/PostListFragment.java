@@ -1,6 +1,7 @@
 package h4cirf.com.h4cinternetrelayfood;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.amazonaws.http.HttpResponse;
 import com.auth0.android.Auth0;
@@ -58,6 +60,13 @@ public class PostListFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Switches to the AddPostActivity as used by the postListAdd button
+     */
+    public void addPostAction(View view)
+    {
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +82,10 @@ public class PostListFragment extends Fragment {
         posts = new ArrayList<>();
         listView = view.findViewById(R.id.postListView);
         adapter = new PostListAdapter(getContext(), R.layout.post_list_item, posts);
+        SearchView searchView = view.findViewById((R.id.postListSearch));
+        view.requestFocus();
+        /*
+        // Populate our database
         MainActivity parentActivity = (MainActivity) getActivity();
         PostModel tempModel = new PostModel();
         tempModel.amount = "20";
@@ -84,7 +97,6 @@ public class PostListFragment extends Fragment {
         tempModel.title = "Huge carrots!";
         tempModel.status = "available";
         tempModel.email = parentActivity.userProfile.getEmail();
-        /*
         for(int i = 0; i < 10; ++i)
         {
             MainActivity.api.doPutPost(parentActivity.tokenID, tempModel).enqueue(new Callback<Void>() {
@@ -127,6 +139,7 @@ public class PostListFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 PostModel selectedPost = (PostModel) parent.getItemAtPosition(position);
+                System.out.println("Pressed post with position" + position);
             }
 
             @Override
